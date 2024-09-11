@@ -1,6 +1,23 @@
+require 'net/http'
+
 class UsersController < ApplicationController
+
+    def CallRestAPI(base_url)
+        uri = URI(base_url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+      
+        request = Net::HTTP::Get.new(uri.path, {'Content-Type' => 'application/json'})
+            
+        response = http.request(request)
+
+        return JSON.parse(response.body) 
+    end
+
     def index
-        @users = User.all 
+        @dbUsers = User.count
+        puts(@dbUsers)
+        @users = CallRestAPI('https://fakestoreapi.com/users')
         render json: @users
     end
 

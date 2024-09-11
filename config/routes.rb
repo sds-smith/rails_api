@@ -5,7 +5,11 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # options '*path', to: 'application#cors_preflight_check'
+  match '/users', controller: 'cors', action: 'cors_preflight_check', via: [:options]
+  
   resources :users, only: [:index, :create]
+  resources :products, only: [:index, :create]
 
   # Defines the root path route ("/")
   # root "posts#index"
